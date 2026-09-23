@@ -1,4 +1,4 @@
-image: gradle:9.7.1-jdk25-corretto
+image: eclipse-temurin:25-jdk
 
 stages:
   - build
