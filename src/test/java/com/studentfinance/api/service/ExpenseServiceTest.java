@@ -1,6 +1,7 @@
 package com.studentfinance.api.service;
 
 import com.studentfinance.api.model.Expense;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -11,7 +12,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class ExpenseServiceTest {
 
     @Test
-    void shouldAddExpense() {
+    @DisplayName("Adds an expense and assigns an id")
+    void addExpense() {
         ExpenseService service = new ExpenseService();
 
         Expense expense = new Expense(
@@ -29,7 +31,8 @@ class ExpenseServiceTest {
     }
 
     @Test
-    void shouldDeleteExpense() {
+    @DisplayName("Deletes an existing expense")
+    void deleteExpense() {
         ExpenseService service = new ExpenseService();
 
         Expense expense = new Expense(
