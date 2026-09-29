@@ -10,9 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/expenses")
 public class ExpenseController {
-
     private final ExpenseService expenseService;
-
     public ExpenseController(ExpenseService expenseService) {
         this.expenseService = expenseService;
     }
@@ -23,19 +21,19 @@ public class ExpenseController {
     }
 
     @PostMapping
-    public Expense addExpense(@RequestBody Expense expense) {
+    public Expense addExpense(@RequestBody Expense expense) { // @RequestBody converts JSON to Expense
         return expenseService.addExpense(expense);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteExpense(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteExpense(@PathVariable Long id) { // @PathVariable gets the id from /{id}
 
         boolean deleted = expenseService.deleteExpense(id);
 
         if (deleted) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.noContent().build(); // 204 No Content
         }
 
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.notFound().build(); // 404 Not Found
     }
 }
