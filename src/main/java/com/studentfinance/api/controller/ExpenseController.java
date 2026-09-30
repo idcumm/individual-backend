@@ -11,7 +11,7 @@ import java.util.List;
 @RequestMapping("/expenses")
 public class ExpenseController {
     private final ExpenseService expenseService;
-    public ExpenseController(ExpenseService expenseService) {
+    public ExpenseController(ExpenseService expenseService) { // Spring injects the service
         this.expenseService = expenseService;
     }
 

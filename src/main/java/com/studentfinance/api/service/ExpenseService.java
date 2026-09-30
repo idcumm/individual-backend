@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public class ExpenseService {
 
-    private final List<Expense> expenses = new ArrayList<>();
+    private final List<Expense> expenses = new ArrayList<>(); // in memory, lost on restart
     private long nextId = 1;
 
 
@@ -20,7 +20,7 @@ public class ExpenseService {
 
     // Called by POST /expenses
     public Expense addExpense(Expense expense) {
-        expense.setId(nextId++);
+        expense.setId(nextId++); // server sets the id, not the client
         expenses.add(expense);
         return expense;
     }
