@@ -26,7 +26,7 @@ class ExpenseServiceTest {
 
         Expense created = service.addExpense(expense);
 
-        assertEquals(1L, created.getId());
+        assertEquals(1L, created.getId()); // Long 1
         assertEquals(1, service.getAllExpenses().size());
     }
 
