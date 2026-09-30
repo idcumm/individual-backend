@@ -43,7 +43,7 @@ docker:
 
   variables:
     DOCKER_HOST: tcp://docker:2375
-    DOCKER_TLS_CERTDIR: "" # no TLS, so port 2375
+    DOCKER_TLS_CERTDIR: "" # disables TLS, so port 2375, no certificates
 
   script:
-    - docker build -t student-finance-api .
+    - docker build -t student-finance-api . # only checks it builds, no push, image lost
