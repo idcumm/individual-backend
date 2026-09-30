@@ -9,6 +9,7 @@ RUN ./gradlew bootJar --no-daemon
 # Light linux build
 FROM eclipse-temurin:25-jre-alpine
 WORKDIR /app
+# Only the jar, name breaks if version changes
 COPY --from=build /app/build/libs/student-finance-api-0.0.1-SNAPSHOT.jar app.jar
-# Linux exec()
+# Linux exec() 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]

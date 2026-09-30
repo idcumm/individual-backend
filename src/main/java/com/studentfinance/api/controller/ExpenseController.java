@@ -20,7 +20,7 @@ public class ExpenseController {
         return expenseService.getAllExpenses();
     }
 
-    @PostMapping
+    @PostMapping // returns 200, should be 201 Created
     public Expense addExpense(@RequestBody Expense expense) { // @RequestBody converts JSON to Expense
         return expenseService.addExpense(expense);
     }

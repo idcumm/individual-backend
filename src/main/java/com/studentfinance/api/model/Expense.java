@@ -11,8 +11,8 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor // Jackson needs it to read the JSON
-@AllArgsConstructor
-public class Expense {
+@AllArgsConstructor // used by the tests
+public class Expense { // no validation yet, accepts negative or null values
 
     private Long id;
     private BigDecimal amount; // not double, exact decimals for money

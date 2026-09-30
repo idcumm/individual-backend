@@ -6,11 +6,11 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Service // Spring creates one instance (bean)
 public class ExpenseService {
 
     private final List<Expense> expenses = new ArrayList<>(); // in memory, lost on restart
-    private long nextId = 1;
+    private long nextId = 1; // not thread-safe, two POSTs could get the same id
 
 
     // Called by GET /expenses
