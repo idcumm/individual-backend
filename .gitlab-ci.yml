@@ -7,16 +7,13 @@ stages:
 
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+  GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle" # GitLab only caches inside the project
 
 cache:
   key: "$CI_COMMIT_REF_SLUG"
   paths:
     - .gradle/caches
     - .gradle/wrapper
-
-before_script:
-  - export GRADLE_USER_HOME=`pwd`/.gradle
-  - chmod +x gradlew
 
 build:
   stage: build
@@ -46,7 +43,7 @@ docker:
 
   variables:
     DOCKER_HOST: tcp://docker:2375
-    DOCKER_TLS_CERTDIR: ""
+    DOCKER_TLS_CERTDIR: "" # no TLS, so port 2375
 
   script:
     - docker build -t student-finance-api .
