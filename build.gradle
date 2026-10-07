@@ -26,3 +26,8 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+// Only the executable boot jar, so build/libs/*.jar matches a single file
+tasks.named('jar') {
+	enabled = false
+}
