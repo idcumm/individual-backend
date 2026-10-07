@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+      - uses: gradle/actions/setup-gradle@v4   # sustituye al cache: de GitLab
+      - run: ./gradlew assemble
+      - uses: actions/upload-artifact@v4      # = artifacts: de GitLab
+        with:
+          name: jar
+          path: build/libs/*.jar
+
+  test:
+    needs: build                              # = stages: en orden
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+      - uses: gradle/actions/setup-gradle@v4
+      - run: ./gradlew test
+      - uses: actions/upload-artifact@v4
+        if: always()                          # = when: always
+        with:
+          name: test-results
+          path: build/test-results/test/
+
+  docker:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4    # recupera el jar del job build
+        with:
+          name: jar
+          path: build/libs
+      - run: docker build -t student-finance-api .   # el runner ya trae Docker, no hace falta dind
