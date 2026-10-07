@@ -39,12 +39,25 @@ jobs:
           path: build/test-results/test/
 
   docker:
-    needs: build
+    needs: [build, test]                     # no construye la imagen si fallan los tests
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write                         # permite a GITHUB_TOKEN subir a ghcr.io
+    env:
+      IMAGE: ghcr.io/${{ github.repository }}  # ghcr.io/idcumm/individual-backend
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4    # recupera el jar del job build
         with:
           name: jar
           path: build/libs
-      - run: docker build -t student-finance-api .   # el runner ya trae Docker, no hace falta dind
+      - run: docker build -t $IMAGE:latest -t $IMAGE:${{ github.sha }} .   # el runner ya trae Docker, no hace falta dind
+      - if: github.event_name == 'push'       # en pull requests solo se construye, no se sube
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}  # token automático, no hay que crear secrets
+      - if: github.event_name == 'push'
+        run: docker push --all-tags $IMAGE
