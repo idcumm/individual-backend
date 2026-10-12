@@ -1,0 +1,21 @@
+package com.studentfinance.api.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+@Getter
+@Setter
+@NoArgsConstructor // Jackson needs it to read the JSON
+@AllArgsConstructor
+public class ExpenseResponse {
+    private Long id;
+    private BigDecimal amount; // not double, exact decimals for money
+    private String category;
+    private LocalDate date;
+    private String description;
+}
