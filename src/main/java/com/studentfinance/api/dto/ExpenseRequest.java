@@ -1,6 +1,7 @@
 package com.studentfinance.api.dto;
 
-import lombok.AllArgsConstructor;
+import com.studentfinance.api.model.ExpenseType;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,11 +11,20 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@NoArgsConstructor // Jackson needs it to read the JSON
-@AllArgsConstructor
+@NoArgsConstructor
 public class ExpenseRequest {
-    private BigDecimal amount; // not double, exact decimals for money
+    @NotNull @PositiveOrZero @Digits(integer = 4, fraction = 2) // max 9999.99
+    private BigDecimal amount;
+    @NotNull
+    private ExpenseType type;
+    @NotBlank @Size(max = 30)
     private String category;
+    @NotNull
     private LocalDate date;
+    @Size(max = 100)
     private String description;
+
+    public void setCategory(String category) {
+        this.category = category == null ? null : category.strip();
+    }
 }

@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExpenseMapper {
     public Expense toExpense(ExpenseRequest request) {
-        return new Expense(null, request.getAmount(), request.getCategory(), request.getDate(), request.getDescription());
+        return new Expense(null, request.getAmount(), request.getType(), request.getCategory(), request.getDate(), request.getDescription());
     }
 
     public ExpenseResponse toResponse(Expense expense) {
-        return new ExpenseResponse(expense.getId(), expense.getAmount(), expense.getCategory(), expense.getDate(), expense.getDescription());
+        return new ExpenseResponse(expense.getId(), expense.getAmount(), expense.getType(), expense.getCategory(), expense.getDate(), expense.getDescription());
     }
 }
