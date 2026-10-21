@@ -8,6 +8,7 @@ import com.studentfinance.api.service.ExpenseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import jakarta.validation.Valid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +33,10 @@ public class ExpenseController {
         }
         return responses;
     }
-    
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) // Returns 201 Created
-    public ExpenseResponse addExpense(@RequestBody ExpenseRequest request) {
+    public ExpenseResponse addExpense(@Valid @RequestBody ExpenseRequest request) {
         Expense expense = expenseMapper.toExpense(request);
         Expense saved = expenseService.addExpense(expense);
         return expenseMapper.toResponse(saved);

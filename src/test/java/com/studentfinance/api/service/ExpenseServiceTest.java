@@ -1,6 +1,7 @@
 package com.studentfinance.api.service;
 
 import com.studentfinance.api.model.Expense;
+import com.studentfinance.api.model.ExpenseType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -19,6 +20,7 @@ class ExpenseServiceTest {
         Expense expense = new Expense(
                 null,
                 new BigDecimal("12.50"),
+                ExpenseType.EXPENSE,
                 "Food",
                 LocalDate.of(2026, 9, 23),
                 "Supermarket"
@@ -38,6 +40,7 @@ class ExpenseServiceTest {
         Expense expense = new Expense(
                 null,
                 new BigDecimal("12.50"),
+                ExpenseType.EXPENSE,
                 "Food",
                 LocalDate.of(2026, 9, 23),
                 "Supermarket"
