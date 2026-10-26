@@ -15,7 +15,7 @@ public class ExpenseService {
 
     // Called by GET /expenses
     public List<Expense> getAllExpenses() {
-        return expenses;
+        return List.copyOf(expenses); // read-only copy, callers can't modify the internal list
     }
 
     // Called by POST /expenses
