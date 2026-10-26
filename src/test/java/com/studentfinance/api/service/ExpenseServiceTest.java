@@ -12,45 +12,50 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ExpenseServiceTest {
 
+    // JUnit creates a new instance per test, so each test starts with an empty service
+    private final ExpenseService service = new ExpenseService();
+
+    private Expense newExpense() {
+        return new Expense(null, new BigDecimal("12.50"), ExpenseType.EXPENSE, "Food", LocalDate.of(2026, 9, 23), "Supermarket");
+    }
+
     @Test
-    @DisplayName("Adds an expense and assigns an id")
+    @DisplayName("Adds expenses with incremental ids")
     void addExpense() {
-        ExpenseService service = new ExpenseService();
+        Expense first = service.addExpense(newExpense());
+        Expense second = service.addExpense(newExpense());
 
-        Expense expense = new Expense(
-                null,
-                new BigDecimal("12.50"),
-                ExpenseType.EXPENSE,
-                "Food",
-                LocalDate.of(2026, 9, 23),
-                "Supermarket"
-        );
+        assertEquals(1L, first.getId());
+        assertEquals(2L, second.getId());
+        assertEquals(2, service.getAllExpenses().size());
+    }
 
-        Expense created = service.addExpense(expense);
+    @Test
+    @DisplayName("The returned list cannot be modified from outside")
+    void getAllExpenses_readOnly() {
+        service.addExpense(newExpense());
 
-        assertEquals(1L, created.getId()); // Long 1
+        assertThrows(UnsupportedOperationException.class, () -> service.getAllExpenses().clear());
         assertEquals(1, service.getAllExpenses().size());
     }
 
     @Test
-    @DisplayName("Deletes an existing expense")
+    @DisplayName("Deletes only the expense with the given id")
     void deleteExpense() {
-        ExpenseService service = new ExpenseService();
+        Expense first = service.addExpense(newExpense());
+        Expense second = service.addExpense(newExpense());
 
-        Expense expense = new Expense(
-                null,
-                new BigDecimal("12.50"),
-                ExpenseType.EXPENSE,
-                "Food",
-                LocalDate.of(2026, 9, 23),
-                "Supermarket"
-        );
+        assertTrue(service.deleteExpense(first.getId()));
+        assertEquals(1, service.getAllExpenses().size());
+        assertEquals(second.getId(), service.getAllExpenses().get(0).getId());
+    }
 
-        Expense created = service.addExpense(expense);
+    @Test
+    @DisplayName("Returns false when deleting an id that does not exist")
+    void deleteExpense_notFound() {
+        service.addExpense(newExpense());
 
-        boolean deleted = service.deleteExpense(created.getId());
-
-        assertTrue(deleted);
-        assertTrue(service.getAllExpenses().isEmpty());
+        assertFalse(service.deleteExpense(99L));
+        assertEquals(1, service.getAllExpenses().size());
     }
 }
