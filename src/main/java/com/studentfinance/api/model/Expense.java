@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor // used by the tests
+@AllArgsConstructor // Used by ExpenseMapper to build the model
 public class Expense {
 
     private Long id;

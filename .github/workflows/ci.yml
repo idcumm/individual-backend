@@ -38,8 +38,24 @@ jobs:
           name: test-results
           path: build/test-results/test/
 
+  sonar:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0                          # Sonar necesita el historial completo
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+      - uses: gradle/actions/setup-gradle@v4
+      - run: ./gradlew test jacocoTestReport sonar
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
   docker:
-    needs: [build, test]                     # no construye la imagen si fallan los tests
+    needs: [build, test, sonar]                     # no construye la imagen si fallan los tests
     runs-on: ubuntu-latest
     permissions:
       contents: read

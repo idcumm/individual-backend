@@ -20,13 +20,19 @@ public class ExpenseService {
 
     // Called by POST /expenses
     public Expense addExpense(Expense expense) {
-        expense.setId(nextId++); // server sets the id, not the client
+        expense.setId(nextId++);
         expenses.add(expense);
         return expense;
     }
 
     // Called by DELETE /expenses/{id}
     public boolean deleteExpense(Long id) {
-        return expenses.removeIf(expense -> expense.getId().equals(id)); //.equals() bc Long is an object
+        for (Expense expense : expenses) {
+            if (expense.getId().equals(id)) { // .equals() bc Long is an object
+                expenses.remove(expense);
+                return true;
+            }
+        }
+        return false;
     }
 }
