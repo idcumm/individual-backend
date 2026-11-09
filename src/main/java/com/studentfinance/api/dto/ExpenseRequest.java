@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ExpenseRequest {
+public class ExpenseRequest { // if some rule fails, service responds 400
     @NotNull @PositiveOrZero @Digits(integer = 4, fraction = 2) // max 9999.99
     private BigDecimal amount;
     @NotNull
@@ -24,7 +24,12 @@ public class ExpenseRequest {
     @Size(max = 100)
     private String description;
 
+    //Custom setter (category)
     public void setCategory(String category) {
-        this.category = category == null ? null : category.strip();
+        if (category == null) {
+            this.category = null;
+        } else {
+            this.category = category.strip();
+        }
     }
 }
