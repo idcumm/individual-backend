@@ -77,9 +77,12 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}  # token automático, no hay que crear secrets
       - if: github.event_name == 'push'
         run: docker push --all-tags $IMAGE
+
   deploy:
       needs: docker
       if: github.event_name == 'push'
       runs-on: self-hosted
       steps:
+        - uses: actions/checkout@v4
+        - run: cp deploy/docker-compose.yml ~/app/docker-compose.yml
         - run: cd ~/app && docker compose pull backend && docker compose up -d backend
