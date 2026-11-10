@@ -13,6 +13,7 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+
   backend:
     image: ghcr.io/idcumm/individual-backend:latest
     restart: unless-stopped
@@ -23,6 +24,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
   frontend:
     image: ghcr.io/idcumm/individual-frontend:latest
     restart: unless-stopped
