@@ -1,5 +1,6 @@
 package com.studentfinance.api.model;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,12 +13,22 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor // Used by ExpenseMapper to build the model
-public class Expense {
 
+@Entity
+public class Expense {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private BigDecimal amount;
+
+    @Enumerated(EnumType.STRING)
     private ExpenseType type;
+
     private String category;
+
     private LocalDate date;
+
     private String description;
+
 }
