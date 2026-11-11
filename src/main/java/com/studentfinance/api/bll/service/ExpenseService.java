@@ -1,7 +1,7 @@
-package com.studentfinance.api.service;
+package com.studentfinance.api.bll.service;
 
-import com.studentfinance.api.model.Expense;
-import com.studentfinance.api.repository.ExpenseRepository;
+import com.studentfinance.api.dal.model.Expense;
+import com.studentfinance.api.dal.repository.ExpenseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
