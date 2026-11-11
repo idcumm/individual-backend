@@ -1,15 +1,15 @@
-package com.studentfinance.api.dto;
+package com.studentfinance.api.api.dto;
 
-import com.studentfinance.api.model.ExpenseType;
+import com.studentfinance.api.dal.model.ExpenseType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
 public class ExpenseResponse {
+    // Attributes
     private Long id;
     private BigDecimal amount;
     private ExpenseType type;

@@ -1,6 +1,6 @@
-package com.studentfinance.api.repository;
+package com.studentfinance.api.dal.repository;
 
-import com.studentfinance.api.model.Expense;
+import com.studentfinance.api.dal.model.Expense;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ExpenseRepository extends JpaRepository<Expense, Long> { }
