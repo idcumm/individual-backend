@@ -48,4 +48,26 @@ class ExpenseServiceTest {
         assertFalse(service.deleteExpense(99L));
         verify(repository, never()).deleteById(99L);
     }
+
+    @Test
+    void editExpenseEditsWhenItExists() {
+        Expense expense = new Expense();
+        Expense saved = new Expense();
+
+        when(repository.existsById(1L)).thenReturn(true);
+        when(repository.save(expense)).thenReturn(saved);
+
+        assertSame(saved, service.editExpense(1L, expense));
+        assertEquals(1L, expense.getId());
+    }
+
+    @Test
+    void editExpenseDoesNothingWhenItDoesNotExist() {
+        Expense expense = new Expense();
+
+        when(repository.existsById(99L)).thenReturn(false);
+
+        assertNull(service.editExpense(99L, expense));
+        verify(repository, never()).save(any());
+    }
 }

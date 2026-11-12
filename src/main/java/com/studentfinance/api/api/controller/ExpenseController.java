@@ -51,9 +51,16 @@ public class ExpenseController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteExpense(@PathVariable Long id) { // @PathVariable gets the id from /{id}
         boolean deleted = service.deleteExpense(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build(); // 204 No Content
-        }
-        return ResponseEntity.notFound().build(); // 404 Not Found
+        if (deleted) return ResponseEntity.status(204).build(); // No Content
+        return ResponseEntity.status(404).build(); // Not Found
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ExpenseResponse> editExpense(@PathVariable Long id, @Valid @RequestBody ExpenseRequest request) {
+        Expense expense = mapper.toExpense(request);
+        Expense edited = service.editExpense(id, expense);
+        if (edited != null) return ResponseEntity.ok(mapper.toResponse(edited)); // OK
+        return ResponseEntity.status(404).build(); // Not Found
+    }
+
 }
