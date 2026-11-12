@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -64,7 +65,11 @@ class ExpenseControllerTest {
         when(service.addExpense(any())).thenReturn(expense);
 
         String body = """
-                {"amount": 12.50, "type": "EXPENSE", "category": "Food", "date": "2026-09-23", "description": "Supermarket"}
+                {"amount": 12.50,
+                "type": "EXPENSE",
+                "category": "Food",
+                "date": "2026-09-23",
+                "description": "Supermarket"}
                 """;
 
         mockMvc.perform(post("/expenses").contentType(MediaType.APPLICATION_JSON).content(body))
@@ -100,5 +105,57 @@ class ExpenseControllerTest {
 
         mockMvc.perform(delete("/expenses/99"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void putReturns200WhenTheExpenseIsEdited() throws Exception {
+        String body = """
+                {"amount": 12.50,
+                "type": "EXPENSE",
+                "category": "Food",
+                "date": "2026-09-23",
+                "description": "Supermarket"}
+                """;
+
+        when(service.editExpense(eq(1L), any())).thenReturn(expense);
+
+        mockMvc.perform(put("/expenses/1").contentType(MediaType.APPLICATION_JSON).content(body))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.category").value("Food"));
+    }
+
+    @Test
+    void putReturns404WhenTheExpenseDoesNotExist() throws Exception {
+        String body = """
+                {"amount": 12.50,
+                "type": "EXPENSE",
+                "category": "Food",
+                "date": "2026-09-23",
+                "description": "Supermarket"}
+                """;
+
+        when(service.editExpense(eq(99L), any())).thenReturn(null);
+
+        mockMvc.perform(put("/expenses/99")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void putReturns400AndSavesNothingWhenTheBodyIsInvalid() throws Exception {
+        String bodyWithoutAmount = """
+                {"type": "EXPENSE",
+                "category": "Food",
+                "date": "2026-09-23"}
+                """;
+
+        mockMvc.perform(put("/expenses/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(bodyWithoutAmount))
+                .andExpect(status().isBadRequest());
+
+        verify(service, never()).editExpense(any(), any());
     }
 }

@@ -54,4 +54,13 @@ public class ExpenseController {
         if (deleted) return ResponseEntity.status(204).build(); // No Content
         return ResponseEntity.status(404).build(); // Not Found
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ExpenseResponse> editExpense(@PathVariable Long id, @Valid @RequestBody ExpenseRequest request) {
+        Expense expense = mapper.toExpense(request);
+        Expense edited = service.editExpense(id, expense);
+        if (edited != null) return ResponseEntity.ok(mapper.toResponse(edited)); // OK
+        return ResponseEntity.status(404).build(); // Not Found
+    }
+
 }
