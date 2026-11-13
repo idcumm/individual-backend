@@ -5,7 +5,6 @@ import com.studentfinance.api.api.dto.ExpenseResponse;
 import com.studentfinance.api.api.mapper.ExpenseMapper;
 import com.studentfinance.api.dal.model.Expense;
 import com.studentfinance.api.bll.service.ExpenseService;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import jakarta.validation.Valid;
@@ -28,23 +27,22 @@ public class ExpenseController {
 
     // Method getExpenses()
     @GetMapping
-    public List<ExpenseResponse> getExpenses() {
+    public ResponseEntity<List<ExpenseResponse>> getExpenses() {
         List<Expense> expenses = service.getAllExpenses();
         List<ExpenseResponse> responses = new ArrayList<>();
         for (Expense expense : expenses) {
             ExpenseResponse r = mapper.toResponse(expense);
             responses.add(r);
         }
-        return responses;
+        return ResponseEntity.status(200).body(responses); // OK
     }
 
     // Method addExpense()
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED) // Returns 201 Created
-    public ExpenseResponse addExpense(@Valid @RequestBody ExpenseRequest request) {
+    public ResponseEntity<ExpenseResponse> addExpense(@Valid @RequestBody ExpenseRequest request) {
         Expense expense = mapper.toExpense(request);
         Expense saved = service.addExpense(expense);
-        return mapper.toResponse(saved);
+        return ResponseEntity.status(201).body(mapper.toResponse(saved)); // Created
     }
 
     // Method deleteExpense()
@@ -59,7 +57,7 @@ public class ExpenseController {
     public ResponseEntity<ExpenseResponse> editExpense(@PathVariable Long id, @Valid @RequestBody ExpenseRequest request) {
         Expense expense = mapper.toExpense(request);
         Expense edited = service.editExpense(id, expense);
-        if (edited != null) return ResponseEntity.ok(mapper.toResponse(edited)); // OK
+        if (edited != null) return ResponseEntity.status(200).body(mapper.toResponse(edited)); // OK
         return ResponseEntity.status(404).build(); // Not Found
     }
 
